@@ -1,0 +1,54 @@
+{% extends "blog/base.html" %}
+{% load blog_tags %}
+ 
+{% block title %}{{ post.title }}{% endblock %}
+ 
+{% block content %} 
+  <h1>{{ post.title }}</h1>
+
+  <p class="date">
+    Published {{ post.publish }} by {{ post.author }} 
+  </p> 
+  {{ post.body|markdown }}
+<!--  <a href="{% url 'blog:post_share' post.id %}">Share this post </a>-->
+  <div class="container">
+    <button class="btn btn2"><a href="{% url 'blog:post_share' post.id %}">Share this post</a></button>
+  </div>
+
+  {% if similar_posts %}
+    <div class="similar-posts"><h1 class="sim">Similar posts</h1></div>
+    {% for s_posts in similar_posts %}
+      <div class="similar">
+        <p>
+           <a href="{{ s_posts.get_absolute_url }}">{{ s_posts.title }}</a>
+        </p>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  {% with comments.count as total_comments %}
+    <h2>{{ total_comments }} comment{{ total_comments|pluralize }}</h2>
+  {% endwith %}
+  {% for comment in comments %}
+    <div class="comment">
+      <p class="info-name">{{ comment.name }}</p>
+      <p class="info">Comment {{ forloop.counter }} this post {{ comment.created }}</p>
+      <h5>{{ comment.body|markdown }}</h5>
+    </div>
+  {% empty %}
+    <p>There are no comments yet.</p>
+  {% endfor %}
+
+  {% if new_comment %}
+    <h2>Your comment has been added.</h2>
+  {% else %}
+    <h2>Add a new comment</h2>
+    <form action="." method="post">
+      {{ comment_form.name }}
+      {{ comment_form.email }}
+      {{ comment_form.body }}
+      {% csrf_token %}
+      <button class="btn btn2"><input type="submit" class="btn-input" value="Comment"></button>
+    </form>
+  {% endif %}
+{% endblock %}

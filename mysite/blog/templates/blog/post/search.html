@@ -1,0 +1,28 @@
+{% extends "blog/base.html" %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+    {% if query %}
+        <h3>Post containing "{{ query }}"</h3>
+        <h3>
+            {% with results.count as result %}
+                Found {{ result }} result{{ result|pluralize }}
+            {% endwith %}
+        </h3>
+
+        {% for post in results %}
+            <h2><a href="{{ post.get_absolute_url }}">{{ post.title }}. </a></h2>
+            <p>{{ post.body|truncatewords:30 }}</p>
+        {% empty %}
+            <p>There are not results for your query.</p>
+        {% endfor %}
+
+    {% else %}
+        <h1>Search for posts</h1>
+        <form action="." method="get">
+            {{ form.query }}
+        <button class="btn btn2"><input type="submit" class="btn-input" value="Search"></button>
+        </form>
+    {% endif %}
+{% endblock %}

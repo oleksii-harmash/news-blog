@@ -1,0 +1,8 @@
+<ul>
+    {% for post in latest_posts %}
+        {% with post.title as title %}
+        <li class="latest"><a href="{{ post.get_absolute_url }}">{{ title|truncatewords:5 }}</a></li>
+        {% endwith %}
+    {% endfor %}
+</ul>
+

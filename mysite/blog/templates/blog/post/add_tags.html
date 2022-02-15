@@ -1,0 +1,16 @@
+{% extends "blog/base.html" %}
+
+{% block title %}New tags{% endblock %}
+
+{% block content %}
+    {% if add %}
+        <h1>Your tags successfully added to {{ post.title }}.</h1>
+    {% else %}
+        <h1>Add a new tags for "{{ post.title }}"</h1>
+        <form action="." method="post">
+            {{ tag.tag }}
+            {% csrf_token %}
+            <button class="btn btn2"><input type="submit" class="btn-input" value="Add tags"></button>
+        </form>
+    {% endif %}
+{% endblock %}
